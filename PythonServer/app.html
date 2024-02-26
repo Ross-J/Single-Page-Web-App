@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="description" content="Webpage description goes here" />
+    <meta charset="utf-8">
+    <title>Single Page Web App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!--
+            <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+            using ajax with jquery library... 
+            downloading jquery tools from trusted third-party provider for faster access (because likely cached on nearby proxy server...)
+    -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+  
+    <div class="container">
+        <div>
+            <h1>Single Page Web App</h1>
+        </div>
+        <div id="main">
+            <table>
+                <tbody>
+                    <tr>
+                        <td><button id="button-login">Log In</button></td>
+                        <td><button id="button-signup">Sign Up</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="message-area">
+            <!-- render submit message dynamically here -->
+        </div>
+        <div id="form-area">
+            <!-- render login form dynamically here -->
+        </div>
+    </div>
+
+    <script>
+        // code to execute when html page is loaded (dynamically updating page content by manipulating html elements)
+        $(document).ready(function() {
+            // code that makes HTML dynamic and interactive 
+            /* document.getElementById("main").innerHTML = "<h1>Hello</h1>"
+            $("#main").click(function() {
+                $("#main").html("Clicked");
+            }) */
+
+            // when login button is clicked, dynamically load the login form to the page using ajax
+            $("#button-login").click(function(){
+                $.ajax({
+                    // initiate call to retrieve json from api, provided with method and URL
+                    method: "GET",
+                    url: "/api/login"
+                }).done(function(data){
+                    // render the data received on the html page 
+                    console.log(data);
+                    html = data.html;
+                    $("#form-area").html(html);
+                    // enable POST request for submit button on form, overwriting default submit functionality
+                    $("#login-form").submit(function(event){
+                        event.preventDefault();
+                        $.ajax({
+                            method: "POST",
+                            url: "/api/login",
+                            data: {
+                                username: $("#username").val(),
+                                password: $("#password").val()
+                            }
+                        }).done(function(data){
+                            console.log(data);
+                            if (data.answer == 200){ // request is successful, log user in
+                                $("#form-area").html("");
+                                $("#message-area").html("Welcome, " + data.username + "!");
+                            } else if (data.answer == 400){ // request is not successful, display error
+                                $("#message-area").html(data["error-message"]);
+                                $("#username").val("");
+                                $("#password").val("");
+                            }
+                        });
+                    });
+                });
+            });
+
+
+
+            // when signup button is clicked, dynamically load the signup form to the page using ajax
+            $("#button-signup").click(function(){
+                $.ajax({
+                    // initiate call to retrieve json from api, provided with method and URL
+                    method: "GET",
+                    url: "/api/register"
+                }).done(function(data){
+                    // render the data received on the html page 
+                    console.log(data);
+                    html = data.html;
+                    $("#form-area").html(html);
+                    // enable POST request for submit button on form, overwriting default submit functionality
+                    $("#register-form").submit(function(event){
+                        event.preventDefault();
+                        $.ajax({
+                            method: "POST",
+                            url: "/api/register",
+                            data: {
+                                username: $("#username").val(),
+                                password: $("#password").val(),
+                                password2: $("#password2").val()
+                            }
+                        }).done(function(data){
+                            console.log(data);
+                            if (data.answer == 200){ // request is successful, log user in
+                                $("#form-area").html("");
+                                $("#message-area").html("Welcome, " + data.username + "!");
+                            } else if (data.answer == 400){ // request is not successful, display error
+                                $("#message-area").html(data["error-message"]);
+                                $("#username").val("");
+                                $("#password").val("");
+                            }
+                        });
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
