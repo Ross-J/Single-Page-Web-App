@@ -1,6 +1,6 @@
 <!-- html signup form to load dynamically through API functionality -->
 
-<form method="POST" action="/register">
+<form id="register-form" method="POST" action="/register">
     <div>
         <!-- when label is clicked, it will jump to username text input field with id equal to for attribute -->
         <label for="username">Username</label>
@@ -9,11 +9,11 @@
     </div>
     <div>
         <label for="password">Password</label>
-        <input type="password" name="password" placeholder="Enter your password."/>
+        <input id="password" type="password" name="password" placeholder="Enter your password."/>
     </div>
     <div>
         <label for="password2">Re-enter password</label>
-        <input type="password" name="password2" placeholder="Re-enter your password."/>
+        <input id="password2" type="password" name="password2" placeholder="Re-enter your password."/>
     </div>
     <div>
         <input type="submit" value="Create Account"/>
